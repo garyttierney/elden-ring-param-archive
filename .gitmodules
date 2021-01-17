@@ -1,0 +1,6 @@
+[submodule "vendor/soulsformats"]
+	path = vendor/soulsformats
+	url = https://github.com/JKAnderson/SoulsFormats
+[submodule "vendor/paramdex"]
+	path = vendor/paramdex
+	url = https://github.com/soulsmods/paramdex.git
