@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="vendor\soulsformats\SoulsFormats\SoulsFormats.csproj">
+        <ProjectReference Include="vendor\soulsformats\SoulsFormats\SoulsFormats.csproj" SetTargetFramework="TargetFramework=netstandard2.1" ExcludeAssets="*/SoulsFormats.AssemblyInfo.cs">
             <Project>{22c664bd-877b-44df-8ecf-2808522469a8}</Project>
             <Name>SoulsFormats</Name>
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
