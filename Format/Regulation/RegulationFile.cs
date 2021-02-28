@@ -11,6 +11,16 @@ namespace SoulsParamsConverter
     {
         private static byte[] ds3RegulationKey = Encoding.ASCII.GetBytes("ds3#jn/8_7(rsY9pg55GFN7VFL#+3n/)");
 
+        public static BND4 Load(FileInfo path)
+        {
+            return path.Extension switch
+            {
+                ".bdt" => RegulationFile.DecryptDS3Regulation(path.FullName),
+                ".dcx" => BND4.Read(path.FullName),
+                _ => throw new InvalidOperationException($"{path.Name} is not a valid parambnd or regulation file")
+            };
+        }
+        
         /// <summary>
         /// Decrypts and unpacks DS3's regulation BND4 from the specified path.
         /// </summary>

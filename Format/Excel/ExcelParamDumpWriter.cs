@@ -42,6 +42,8 @@ namespace SoulsParamsConverter.Format.Excel
 
         public ExcelParamDumpWriter(FileInfo path)
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             Spreadsheet = new ExcelPackage(path);
         }
 
@@ -55,6 +57,7 @@ namespace SoulsParamsConverter.Format.Excel
             Console.WriteLine(name);
 
             var worksheet = Spreadsheet.Workbook.Worksheets.Add(name);
+            worksheet.Comments.Add(worksheet.Cells[1, 1], param.ParamType, "paramtools");
             worksheet.HeaderFooter.FirstFooter.RightAlignedText = param.ParamType;
 
             worksheet.Cells[1, 1].Value = "ID";
@@ -98,7 +101,7 @@ namespace SoulsParamsConverter.Format.Excel
                 {
                     fieldOffset = fieldOffset + $":{fieldBitOffset}";
                 }
-                
+
                 if (field.BitSize == 1)
                 {
                     style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

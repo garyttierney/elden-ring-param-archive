@@ -19,7 +19,7 @@ namespace SoulsParamsConverter
             {
                 ParamFormat.Regulation => new RegulationFileParamDumpReader(path),
                 ParamFormat.Sqlite => new SqliteParamDumpReader(path),
-                ParamFormat.Excel => new ExcelParamDumpReader(),
+                ParamFormat.Excel => new ExcelParamDumpReader(path),
                 _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
             };
         }

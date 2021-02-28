@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SoulsFormats;
@@ -12,8 +13,8 @@ namespace SoulsParamsConverter
 
         public RegulationFileParamDumpReader(FileInfo path)
         {
-            var regulation = RegulationFile.DecryptDS3Regulation(path.FullName);
-
+            var regulation = RegulationFile.Load(path);
+          
             Params = regulation.Files
                 .Where(f => f.Name.EndsWith(".param"))
                 .ToDictionary(file => Path.GetFileNameWithoutExtension(file.Name), file => PARAM.Read(file.Bytes));

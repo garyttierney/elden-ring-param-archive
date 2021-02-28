@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace SoulsParamsConverter.Commands
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            Console.WriteLine($"Input {inputPath.FullName}");
+
             using var reader = inputFormat.CreateReader(game, inputPath);
             using var writer = outputFormat.CreateWriter(game, outputPath);
 
@@ -26,6 +29,8 @@ namespace SoulsParamsConverter.Commands
             {
                 var paramName = paramRef.Name;
                 var paramType = paramRef.Type;
+
+                Console.WriteLine($"Reading {paramName} with type {paramType}");
 
                 var paramDef = PARAMDEF.XmlDeserialize($"{paramdexPath.FullName}/{game}/Defs/{paramType}.xml");
                 var param = reader.Read(paramName, paramDef);
