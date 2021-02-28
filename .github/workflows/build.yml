@@ -24,6 +24,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'paramtools-${{ github.sha }}'
-          path: '${{ runner.workspace }}/deploy'
+          path: '${{ runner.workspace }}/paramtools/deploy'
 
 
