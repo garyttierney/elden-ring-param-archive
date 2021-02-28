@@ -11,11 +11,14 @@ jobs:
         with:
           dotnet-version: '3.1.x' # SDK Version to use; x will use the latest version of the 3.1 channel
         
+      - name: Restore
+        run: dotnet restore --configuration Release
+        
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish --configuuration Release -o deploy
+        run: dotnet publish --configuration Release -o deploy
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
