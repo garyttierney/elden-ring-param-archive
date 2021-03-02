@@ -49,7 +49,10 @@ namespace SoulsParamsConverter.Format.Excel
 
         public void Dispose()
         {
-            Spreadsheet.Save();
+            if (Spreadsheet.Workbook.Worksheets.Count > 0)
+            {
+                Spreadsheet.Save();
+            }
         }
 
         public void Write(string name, PARAM param)
