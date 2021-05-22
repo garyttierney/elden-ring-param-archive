@@ -61,6 +61,8 @@ namespace SoulsParamsConverter
     {
         public static async Task<int> Main(params string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             var convert = new Command("convert", "Convert a set of PARAM files in one format to another")
             {
                 new Option<Game>(
@@ -77,12 +79,16 @@ namespace SoulsParamsConverter
                     "An option whose argument is parsed as a FileInfo"),
                 new Option<FileInfo>(
                     "--paramdex-path",
-                    "Path to SoulsMods Paramdex")
+                    "Path to SoulsMods Paramdex"),
+                new Option<Regex>(
+                    "--type-filter",
+                    description: "Regex to filter param types",
+                    getDefaultValue: () => new Regex(@".*"))
             };
 
             convert.Handler =
                 CommandHandler
-                    .Create<Game, ParamFormat, FileInfo, ParamFormat, FileInfo, FileInfo>(ParamsConverter.Run);
+                    .Create<Game, ParamFormat, FileInfo, ParamFormat, FileInfo, FileInfo, Regex>(ParamsConverter.Run);
 
             var schema = new Command("generate-schema", "Generate a schema for PARAMDEF files")
             {
@@ -104,7 +110,7 @@ namespace SoulsParamsConverter
             var rootCommand = new RootCommand("Tools for working with the FromSoftware PARAM format")
             {
                 convert,
-                schema
+                schema,
             };
 
             return await rootCommand.InvokeAsync(args);
