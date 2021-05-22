@@ -33,13 +33,15 @@ namespace SoulsParamsConverter.Format.Json
             {
                 writer.WritePropertyName(row.ID.ToString());
                 writer.WriteStartObject();
+                writer.WritePropertyName("name");
+                writer.WriteValue(row.Name);
                 
                 for (var cellIndex = 0; cellIndex < row.Cells.Count; cellIndex++)
                 {
                     var cell = row.Cells[cellIndex];
                     
                     writer.WritePropertyName(cell.Def.DisplayName);
-
+                    
                     if (cell.Value is byte[])
                     {
                         writer.WriteValue("-");

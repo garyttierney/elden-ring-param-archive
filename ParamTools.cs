@@ -2,10 +2,13 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SoulsFormats;
 using SoulsParamsConverter.Commands;
 using SoulsParamsConverter.Format;
+using SoulsParamsConverter.Format.Csv;
 using SoulsParamsConverter.Format.Excel;
 using SoulsParamsConverter.Format.Json;
 using SoulsParamsConverter.Format.SQLite;
@@ -21,6 +24,7 @@ namespace SoulsParamsConverter
                 ParamFormat.Regulation => new RegulationFileParamDumpReader(path),
                 ParamFormat.Sqlite => new SqliteParamDumpReader(path),
                 ParamFormat.Excel => new ExcelParamDumpReader(path),
+                ParamFormat.Csv => new CsvParamDumpReader(path),
                 _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
             };
         }
@@ -33,6 +37,7 @@ namespace SoulsParamsConverter
                 ParamFormat.Sqlite => new SqliteParamDumpWriter(path),
                 ParamFormat.Excel => new ExcelParamDumpWriter(path),
                 ParamFormat.Json => new JsonParamDumpWriter(path),
+                ParamFormat.Csv => new CsvParamDumpWriter(path),
                 _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
             };
         }
@@ -44,6 +49,7 @@ namespace SoulsParamsConverter
         Sqlite,
         Excel,
         Json,
+        Csv
     }
 
     public enum Game

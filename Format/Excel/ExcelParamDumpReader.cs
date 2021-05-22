@@ -53,6 +53,12 @@ namespace SoulsParamsConverter.Format.Excel
                         continue;
                     }
 
+                    if (value is null)
+                    {
+                        Console.WriteLine($"Row ID {id} and field ${def.Fields[cellIndex].DisplayName} has null value, assuming default");
+                        continue;
+                    }
+                    
                     row.Cells[cellIndex].Value = value;
                 }
                 

@@ -16,12 +16,9 @@ namespace SoulsParamsConverter.Commands
             FileInfo inputPath,
             ParamFormat outputFormat,
             FileInfo outputPath,
-            FileInfo paramdexPath)
+            FileInfo paramdexPath,
+            Regex typeFilter)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            Console.WriteLine($"Input {inputPath.FullName}");
-
             using var reader = inputFormat.CreateReader(game, inputPath);
             using var writer = outputFormat.CreateWriter(game, outputPath);
 
@@ -29,6 +26,11 @@ namespace SoulsParamsConverter.Commands
             {
                 var paramName = paramRef.Name;
                 var paramType = paramRef.Type;
+
+                if (!typeFilter.IsMatch(paramName) && !typeFilter.IsMatch(paramType))
+                {
+                    continue;
+                }
 
                 Console.WriteLine($"Reading {paramName} with type {paramType}");
 
