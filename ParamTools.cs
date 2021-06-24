@@ -55,6 +55,7 @@ namespace SoulsParamsConverter
     public enum Game
     {
         DS3,
+        SDT,
     }
 
     class ParamTools

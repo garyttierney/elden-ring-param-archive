@@ -34,21 +34,33 @@ namespace SoulsParamsConverter.Commands
 
                 Console.WriteLine($"Reading {paramName} with type {paramType}");
 
-                var paramDef = PARAMDEF.XmlDeserialize($"{paramdexPath.FullName}/{game}/Defs/{paramType}.xml");
+                var paramDefPath = $"{paramdexPath.FullName}/{game}/Defs/{paramType}.xml";
+                if (!File.Exists(paramDefPath))
+                {
+                    Console.WriteLine($"No paramdef for {paramName}, {paramType}. Skipping.");
+                    continue;
+                }
+
+                var paramDef = PARAMDEF.XmlDeserialize(paramDefPath);
                 var param = reader.Read(paramName, paramDef);
 
                 /* the same names.txt parsing code from yapped */
                 var paramRowNames = new Dictionary<long, string>();
-                var paramNamesText = File.ReadAllText($@"{paramdexPath.FullName}/{game}/Names/{paramName}.txt");
 
-                foreach (var line in Regex.Split(paramNamesText, @"\s*[\r\n]+\s*"))
+                var paramNamesPath = $@"{paramdexPath.FullName}/{game}/Names/{paramName}.txt";
+                if (File.Exists(paramNamesPath))
                 {
-                    if (line.Length <= 0) continue;
-                    var match = Regex.Match(line, @"^(\d+) (.+)$");
-                    var id = long.Parse(match.Groups[1].Value);
-                    var name = match.Groups[2].Value;
+                    var paramNamesText = File.ReadAllText(paramNamesPath);
 
-                    paramRowNames[id] = name;
+                    foreach (var line in Regex.Split(paramNamesText, @"\s*[\r\n]+\s*"))
+                    {
+                        if (line.Length <= 0) continue;
+                        var match = Regex.Match(line, @"^(\d+) (.+)$");
+                        var id = long.Parse(match.Groups[1].Value);
+                        var name = match.Groups[2].Value;
+
+                        paramRowNames[id] = name;
+                    }
                 }
 
                 foreach (var row in param.Rows.Where(row => paramRowNames.ContainsKey(row.ID)))

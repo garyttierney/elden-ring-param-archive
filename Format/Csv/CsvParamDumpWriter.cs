@@ -19,9 +19,27 @@ namespace SoulsParamsConverter.Format.Csv
 
         public void Dispose()
         {
-           
         }
 
+        public static object GetFieldValue(PARAMDEF.Field Def, object value)
+        {
+            switch (Def.DisplayType)
+            {
+                case PARAMDEF.DefType.s8: return Convert.ToSByte(value); 
+                case PARAMDEF.DefType.u8: return Convert.ToByte(value); 
+                case PARAMDEF.DefType.s16: return Convert.ToInt16(value); 
+                case PARAMDEF.DefType.u16: return Convert.ToUInt16(value); 
+                case PARAMDEF.DefType.s32: return Convert.ToInt32(value); 
+                case PARAMDEF.DefType.u32: return Convert.ToUInt32(value); 
+                case PARAMDEF.DefType.f32: return Convert.ToSingle(value); 
+                case PARAMDEF.DefType.fixstr: return Convert.ToString(value); 
+                case PARAMDEF.DefType.fixstrW: return Convert.ToString(value); 
+
+                default:
+                    throw new NotImplementedException($"Conversion not specified for type {Def.DisplayType}");
+            }
+        }
+        
         public void Write(string name, PARAM param)
         {
             using var csv = new CsvWriter(new StreamWriter($"{_outputDirectory.FullName}/{name}.csv"),
@@ -34,7 +52,7 @@ namespace SoulsParamsConverter.Format.Csv
 
             foreach (var field in param.AppliedParamdef.Fields)
             {
-                csv.WriteField(field.DisplayName);
+                csv.WriteField($"{field.InternalName} - {field.DisplayName} - {field.InternalType}");
             }
 
             csv.NextRecord();
@@ -46,13 +64,21 @@ namespace SoulsParamsConverter.Format.Csv
 
                 foreach (var cell in row.Cells)
                 {
-                    if (cell.Value is byte[])
+                    if (cell.Def.DisplayType == PARAMDEF.DefType.dummy8)
                     {
-                        csv.WriteField("-");
+                        if (cell.Def.DisplayName.Contains("pad"))
+                        {
+                            csv.WriteField("-");
+                        }
+                        else
+                        {
+                            
+                            csv.WriteField(BitConverter.ToString((byte[]) cell.Value));
+                        }
                     }
                     else
                     {
-                        csv.WriteField(cell.Value);
+                        csv.WriteField(GetFieldValue(cell.Def, cell.Value));
                     }
                 }
 
