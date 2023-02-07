@@ -19,8 +19,10 @@ jobs:
         with:
           dotnet-version: '7.0.x'
 
-      - name: Update submodules
-        run: git submodule update --remote
+      - name: Update submodules # https://github.com/actions/checkout/issues/994
+        run: |
+          git submodule foreach 'git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin'
+          git submodule sync && git submodule update --remote
 
       - name: Restore
         run: dotnet restore
