@@ -16,7 +16,9 @@ jobs:
         run: dotnet restore
 
       - name: Update submodules
-        run: git submodule update --remote
+        run: |
+          git submodule foreach 'git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin'
+          git submodule sync && git submodule update --remote
 
       - name: Export
         run: |
