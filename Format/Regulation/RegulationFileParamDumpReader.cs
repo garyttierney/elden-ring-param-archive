@@ -17,7 +17,8 @@ namespace SoulsParamsConverter
           
             Params = regulation.Files
                 .Where(f => f.Name.EndsWith(".param"))
-                .ToDictionary(file => Path.GetFileNameWithoutExtension(file.Name), file => PARAM.Read(file.Bytes));
+                // HACK: windows paths are stored in archives, should really do proper path handling here.
+                .ToDictionary(file => Path.GetFileNameWithoutExtension(file.Name.Replace('\\', Path.DirectorySeparatorChar)), file => PARAM.Read(file.Bytes));
         }
 
 

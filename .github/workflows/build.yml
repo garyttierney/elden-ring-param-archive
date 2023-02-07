@@ -14,7 +14,10 @@ jobs:
         
       - name: Restore
         run: dotnet restore
-        
+
+      - name: Update submodules
+        run: git submodule update --remote
+
       - name: Export
         run: |
           dotnet run paramtools \
