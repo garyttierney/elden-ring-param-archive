@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SoulsFormats;
 using SoulsParamsConverter.Commands;
 using SoulsParamsConverter.Format;
 using SoulsParamsConverter.Format.Csv;
@@ -56,6 +55,7 @@ namespace SoulsParamsConverter
     {
         DS3,
         SDT,
+        ER,
     }
 
     class ParamTools
@@ -108,10 +108,52 @@ namespace SoulsParamsConverter
 
             schema.Handler = CommandHandler.Create<Game, FileInfo, Regex>(ParamsSchemaGenerator.Run);
 
-            var rootCommand = new RootCommand("Tools for working with the FromSoftware PARAM format")
+            var paramCommands = new Command("params", "Tools for working with FromSoftware PARAMs")
             {
                 convert,
-                schema,
+                schema
+            };
+
+            var flverPropertiesUpdater = new Command("properties", "Update FLVER properties")
+            {
+                new Option<bool?>(
+                    "--backface-culling",
+                    getDefaultValue: () => null,
+                    description: "Toggle backface culling in all FLVER submeshes"
+                ),
+                new Option<string>(
+                    "--source",
+                    description: "Path to a MAPBND to edit FLVERs in. May be multiple paths separated by semi-colons.")
+            };
+
+            flverPropertiesUpdater.Handler = CommandHandler.Create<bool?, string>(FlverPropertiesUpdater.Run);
+
+            var flverCommands = new Command("flver", "Tools for working with FLVER models")
+            {
+                flverPropertiesUpdater,
+            };
+
+            var msbExporter = new Command("export", "Export an MSB to JSON")
+            {
+                new Option<FileInfo>(
+                    "--path",
+                    description: "Path to an MSB file"
+                ),
+            };
+
+
+            msbExporter.Handler = CommandHandler.Create<FileInfo>(MsbExporter.Run);
+
+            var msbCommands = new Command("msb", "Tools for working with MSBs")
+            {
+                msbExporter,
+            };
+
+            var rootCommand = new RootCommand("Tools for working with the FromSoftware PARAM format")
+            {
+                paramCommands,
+                flverCommands,
+                msbCommands
             };
 
             return await rootCommand.InvokeAsync(args);

@@ -21,6 +21,9 @@ namespace SoulsParamsConverter.Commands
         {
             using var reader = inputFormat.CreateReader(game, inputPath);
             using var writer = outputFormat.CreateWriter(game, outputPath);
+            var paramdefSources = Directory.GetFiles($"{paramdexPath.FullName}/{game}/Defs/", "*.xml");
+            var paramdefs = paramdefSources.Select(source => PARAMDEF.XmlDeserialize(source))
+                .ToDictionary(def => def.ParamType);
 
             foreach (var paramRef in reader.List())
             {
@@ -34,14 +37,13 @@ namespace SoulsParamsConverter.Commands
 
                 Console.WriteLine($"Reading {paramName} with type {paramType}");
 
-                var paramDefPath = $"{paramdexPath.FullName}/{game}/Defs/{paramType}.xml";
-                if (!File.Exists(paramDefPath))
+                if (!paramdefs.ContainsKey(paramType))
                 {
                     Console.WriteLine($"No paramdef for {paramName}, {paramType}. Skipping.");
                     continue;
                 }
 
-                var paramDef = PARAMDEF.XmlDeserialize(paramDefPath);
+                var paramDef = paramdefs[paramType];
                 var param = reader.Read(paramName, paramDef);
 
                 /* the same names.txt parsing code from yapped */

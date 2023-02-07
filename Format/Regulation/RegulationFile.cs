@@ -9,6 +9,8 @@ namespace SoulsParamsConverter
 {
     public class RegulationFile
     {
+        private static byte[] erRegulationKey = SFUtil.ParseHexString(
+            "99 bf fc 36 6a 6b c8 c6 f5 82 7d 09 36 02 d6 76 c4 28 92 a0 1c 20 7f b0 24 d3 af 4e 49 3f ef 99");
         private static byte[] ds3RegulationKey = Encoding.ASCII.GetBytes("ds3#jn/8_7(rsY9pg55GFN7VFL#+3n/)");
 
         public static BND4 Load(FileInfo path)
@@ -16,6 +18,7 @@ namespace SoulsParamsConverter
             return path.Extension switch
             {
                 ".bdt" => RegulationFile.DecryptDS3Regulation(path.FullName),
+                ".bin" => RegulationFile.DecryptERRegulation(path.FullName),
                 ".dcx" => BND4.Read(path.FullName),
                 _ => throw new InvalidOperationException($"{path.Name} is not a valid parambnd or regulation file")
             };
@@ -29,6 +32,16 @@ namespace SoulsParamsConverter
             byte[] bytes = File.ReadAllBytes(path);
             bytes = DecryptByteArray(ds3RegulationKey, bytes);
             return BND4.Read(bytes);
+        }        
+        
+        /// <summary>
+        /// Decrypts and unpacks DS3's regulation BND4 from the specified path.
+        /// </summary>
+        public static BND4 DecryptERRegulation(string path)
+        {
+            byte[] bytes = File.ReadAllBytes(path);
+            bytes = DecryptByteArray(erRegulationKey, bytes);
+            return BND4.Read(DCX.Decompress(bytes));
         }
 
         /// <summary>
