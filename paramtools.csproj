@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>SoulsParamsConverter</RootNamespace>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="vendor\soulsformats\SoulsFormats\SoulsFormats.csproj" SetTargetFramework="TargetFramework=netstandard2.1" ExcludeAssets="*/SoulsFormats.AssemblyInfo.cs">
+            <Project>{22c664bd-877b-44df-8ecf-2808522469a8}</Project>
+            <Name>SoulsFormats</Name>
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CsvHelper" Version="19.0.0-beta0001" />
+        <PackageReference Include="EPPlus" Version="5.5.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="NPOI" Version="2.5.2" />
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+        <PackageReference Include="System.Data.SQLite" Version="1.0.113.6" />
+        <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include=".github\workflows\build.yml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="gamescom-paramdefs" />
+    </ItemGroup>
+
+</Project>
