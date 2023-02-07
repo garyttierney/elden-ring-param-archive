@@ -31,3 +31,9 @@ jobs:
             params.xlsx \
             --paramdex-path \
             vendor/paramdex
+
+      - name: Upload export
+        uses: actions/upload-artifact@v3
+        with:
+          name: params
+          path: params.xlsx
