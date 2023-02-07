@@ -1,0 +1,45 @@
+name: Release
+on:
+  release:
+    types: [prereleased, released]
+
+jobs:
+
+  release:
+    name: Publish Plugin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v2.4.0
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          submodules: true
+
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Export
+        run: |
+          dotnet run paramtools \
+            params convert \
+            --game \
+            ER \
+            --input-format \
+            regulation \
+            --input-path \
+            regulation.bin \
+            --output-format \
+            excel \
+            --output-path \
+            params.xlsx \
+            --paramdex-path \
+            vendor/paramdex
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} params.xlsx
