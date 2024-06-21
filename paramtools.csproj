@@ -25,6 +25,7 @@
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
         <PackageReference Include="System.Data.SQLite" Version="1.0.113.6" />
         <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+        <PackageReference Include="ZstdSharp.Port" Version="0.8.1" />
     </ItemGroup>
 
     <ItemGroup>
