@@ -1,6 +1,6 @@
 [submodule "vendor/soulsformats"]
 	path = vendor/soulsformats
-	url = https://github.com/JKAnderson/SoulsFormats
+	url = https://github.com/garyttierney/SoulsFormats
 	branch = er
 [submodule "vendor/paramdex"]
 	path = vendor/paramdex
